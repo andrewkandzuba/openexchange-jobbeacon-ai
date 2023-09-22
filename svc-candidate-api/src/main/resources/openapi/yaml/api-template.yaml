@@ -1,0 +1,327 @@
+openapi: 3.0.3
+info:
+  title: Library API - JobBeacon Candidate Registration API
+  description: |-
+    This API provides basic operation for creation, modification and deletion of JobBeacon AI candidates.
+
+    Some useful links:
+    - [The library repository](https://github.com/andrewkandzuba/openexchange-jobbeacon-ai)
+    - [The source API definition for the library](https://github.com/andrewkandzuba/openexchange-jobbeacon-ai/svc-candidate-api/blob/main/src/main/resources/openapi/yaml/candidates.yaml)
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: andrey.kandzuba@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: '0.0.1'
+
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+
+servers:
+  - url: '{protocol}:/api/v1'
+    variables:
+      protocol:
+       enum:
+         - http
+         - https
+       default: http
+
+tags:
+  - name: Candidate
+    description: Operations about candidate
+    externalDocs:
+      description: Find out more
+      url: http://swagger.io
+
+paths:
+  /candidate:
+    post:
+      tags:
+        - Registration
+      summary: Register a new candidate.
+      description: Register new candidate in platform
+      operationId: registerCandidate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Registration'
+            example:
+              $ref: '#/components/examples/newCandidateExample'
+      responses:
+        '201':
+          description: Created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+              example:
+                $ref: '#/components/examples/candidateExample'
+        '400':
+          description: 'something went wrong! '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: The resource you were trying to reach is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /candidate/{id}:
+    get:
+      tags:
+        - Candidate
+      summary: get the "id" candidate.
+      description: Returns a single record by candidate id
+      operationId: findById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "405":
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "404":
+          description: entity by id not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /candidate/login:
+      post:
+        tags:
+          - Login
+        summary: Login a candidate
+        operationId: candidateLogin
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - username
+                  - password
+                properties:
+                  username:
+                    type: string
+                    description: User's chosen username.
+                  password:
+                    type: string
+                    description: User's chosen password.
+        responses:
+          '200':
+            description: Successfully logged in.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    token:
+                      type: string
+                      description: JWT token for the user session.
+                    userId:
+                      type: integer
+                      description: The ID of the logged-in user.
+          '400':
+            description: Bad Request. Login failed.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+components:
+    schemas:
+        ErrorResponse:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+            description:
+              type: string
+            errors:
+              type: object
+        SuccessResponse:
+          type: object
+          properties:
+            data:
+              type: object
+            message:
+              type: string
+        Error:
+          type: object
+          properties:
+            code:
+              type: string
+            message:
+              type: string
+          required:
+            - code
+            - message
+        Registration:
+          required:
+            - email
+            - firstName
+            - lastName
+            - city
+            - country
+            - zip
+          type: object
+          properties:
+            email:
+              maxLength: 255
+              minLength: 1
+              type: string
+              description: candidate email
+            firstName:
+              maxLength: 50
+              minLength: 1
+              type: string
+              description: Candidate First Name
+            lastName:
+              maxLength: 50
+              minLength: 1
+              type: string
+              description: Candidate Last Name
+            city:
+              maxLength: 100
+              minLength: 1
+              type: string
+              description: Candidate City of Residential
+            country:
+              maxLength: 100
+              minLength: 1
+              type: string
+              description: Candidate Country of Residential
+            zip:
+              maxLength: 10
+              minLength: 5
+              type: string
+              description: Candidate Zipcode
+        Candidate:
+          required:
+            - email
+            - firstName
+            - lastName
+            - city
+            - country
+            - zip
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            email:
+              maxLength: 255
+              minLength: 1
+              type: string
+              description: candidate email
+            firstName:
+              maxLength: 50
+              minLength: 1
+              type: string
+              description: Candidate First Name
+            lastName:
+              maxLength: 50
+              minLength: 1
+              type: string
+              description: Candidate Last Name
+            city:
+              maxLength: 100
+              minLength: 1
+              type: string
+              description: Candidate City of Residential
+            country:
+              maxLength: 100
+              minLength: 1
+              type: string
+              description: Candidate Country of Residential
+            zip:
+              maxLength: 10
+              minLength: 5
+              type: string
+              description: Candidate Zipcode
+    securitySchemes:
+        BearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+    examples:
+        candidateExample:
+          value:
+            id: 1
+            email: candidate@gmail.com
+            firstName: John
+            lastName: Smith
+            country: The United States
+            zip: 12345
+          summary: A created candidate
+        newCandidateExample:
+          value:
+            email: candidate@gmail.com
+            firstName: John
+            lastName: Smith
+            country: The United States
+            zip: 12345
+          summary: A new candidate
