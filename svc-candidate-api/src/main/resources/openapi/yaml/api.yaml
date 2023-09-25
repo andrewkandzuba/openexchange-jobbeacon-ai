@@ -37,7 +37,7 @@ tags:
       url: http://swagger.io
 
 paths:
-  /candidate:
+  /candidates:
     post:
       tags:
         - Candidate
@@ -79,8 +79,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
-          description: The resource you were trying to reach is not found
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - Candidate
+      summary: List candidates.
+      description: Retrieve all candidates from platform.
+      operationId: listCandidates.
+      responses:
+        '200':
+          description: 'Read successfully'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Candidate'
+        '400':
+          description: 'something went wrong!'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Accessing the resource you were trying to reach is forbidden
           content:
             application/json:
               schema:
@@ -97,11 +136,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /candidate/{id}:
+  /candidates/{id}:
     get:
       tags:
         - Candidate
-      summary: get the "id" candidate.
+      summary: Retrieve a candidate profile.
       description: Returns a single record by candidate id
       operationId: findById
       parameters:
@@ -113,7 +152,7 @@ paths:
             format: int64
       responses:
         '200':
-          description: Candidate is fouund
+          description: Candidate is found
           content:
             application/json:
               schema:
@@ -156,45 +195,73 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
+    put:
+      tags:
+        - Candidate
+      summary: Update a candidate profile.
+      description: Update a candidate profile to platform
+      operationId: updateCandidate
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Candidate'
+            example:
+              $ref: '#/components/examples/candidate'
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Candidate'
+              example:
+                $ref: '#/components/examples/candidate'
+        '400':
+          description: 'something went wrong!'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: You are not authorized to view the resource
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Accessing the resource you were trying to reach is forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: The resource you were trying to reach is not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '405':
+          description: Method Not Allowed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
-    #responses:
-    #    NotFound:
-    #      description: The specified resource was not found
-    #      content:
-    #        application/json:
-    #          schema:
-    #            $ref: '#/components/schemas/Error'
-    #    BadRequest:
-    #      description: The specified resource was not found
-    #      content:
-    #        application/json:
-    #          schema:
-    #            $ref: '#/components/schemas/Error'
-    #    Unauthorized:
-    #      description: Unauthorized
-    #      content:
-    #        application/json:
-    #          schema:
-    #           $ref: '#/components/schemas/Error'
-    #    Forbidden:
-    #      description: Unauthorized
-    #      content:
-    #        application/json:
-    #          schema:
-    #            $ref: '#/components/schemas/Error'
-    #    NotAllowed:
-    #      description: Unauthorized
-    #      content:
-    #        application/json:
-    #          schema:
-    #           $ref: '#/components/schemas/Error'
-    #    InternalServerError:
-    #      description: Internal Server Error
-    #      content:
-    #        application/json:
-    #          schema:
-    #           $ref: '#/components/schemas/Error'
     schemas:
         Error:
           type: object
@@ -255,42 +322,15 @@ components:
             - city
             - country
             - zip
-          type: object
-          properties:
-            id:
-              type: integer
-              format: int64
-            email:
-              maxLength: 255
-              minLength: 1
-              type: string
-              description: candidate email
-            firstName:
-              maxLength: 50
-              minLength: 1
-              type: string
-              description: Candidate First Name
-            lastName:
-              maxLength: 50
-              minLength: 1
-              type: string
-              description: Candidate Last Name
-            city:
-              maxLength: 100
-              minLength: 1
-              type: string
-              description: Candidate City of Residential
-            country:
-              maxLength: 100
-              minLength: 1
-              type: string
-              description: Candidate Country of Residential
-            zip:
-              maxLength: 10
-              minLength: 5
-              type: string
-              description: Candidate Zipcode
-
+          allOf:
+            - $ref: '#/components/schemas/Registration'
+            - type: object
+              required:
+                - id
+              properties:
+                id:
+                  type: integer
+                  format: int64
     examples:
         candidate:
           value:
