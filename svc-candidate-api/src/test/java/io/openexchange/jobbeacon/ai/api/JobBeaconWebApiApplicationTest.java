@@ -6,7 +6,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
 @ActiveProfiles("local")
-class JobBeaconWebApiApplicationTests {
+class JobBeaconWebApiApplicationTest {
 
     @Test
     void contextLoads() {

@@ -71,7 +71,10 @@
                                 <reactive>false</reactive>
                                 <openApiNullable>false</openApiNullable>
                                 <interfaceOnly>true</interfaceOnly>
-                                <additionalModelTypeAnnotations>@lombok.Generated</additionalModelTypeAnnotations>
+                                <additionalModelTypeAnnotations>
+                                    @lombok.Generated
+                                    @lombok.Builder
+                                </additionalModelTypeAnnotations>
                                 <useJakartaEe>false</useJakartaEe>
                             </configOptions>
                         </configuration>

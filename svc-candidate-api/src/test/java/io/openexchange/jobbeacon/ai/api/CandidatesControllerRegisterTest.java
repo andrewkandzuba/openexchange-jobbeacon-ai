@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
-public class CandidatesControllerTest {
+public class CandidatesControllerRegisterTest {
 
     @Autowired
     private CandidatesController candidatesController;
