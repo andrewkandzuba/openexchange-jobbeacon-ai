@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="JobBeaconWebApiApplication" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot" nameIsGenerated="true">
+        <option name="ACTIVE_PROFILES" value="prod"/>
+        <module name="svc-candidate-api"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="io.openexchange.jobbeacon.ai.JobBeaconWebApiApplication"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="io.openexchange.jobbeacon.ai.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

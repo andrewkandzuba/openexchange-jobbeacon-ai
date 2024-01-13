@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.AUTO;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class CandidateEntity {
     @Id
     @GeneratedValue(strategy = AUTO)
@@ -22,10 +22,10 @@ public class CandidateEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "first_name")
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "last_name")
     private String lastName;
 
     @Column(nullable = false)
