@@ -2,12 +2,11 @@
 version: '3.1'
 
 services:
-
-  mysql:
+  mysqldb:
     image: mysql:latest
     volumes:
       - job-beacon-ai-mysql-data:/var/lib/mysql
-    restart: always
+    restart: on-failure
     ports:
       - 3306:3306
     environment:
@@ -15,6 +14,21 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-
+  svc-candidate-api:
+    image: andrewkandzuba/openexchange-jobbeacon-ai/svc-candidate-api
+    depends_on:
+      - mysqldb
+    links:
+      - mysqldb
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      MYSQL_HOST: mysqldb
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      SPRING_PROFILES_ACTIVE: prod
+      APPLICATION_NAME: svc-candidate-api
 volumes:
   job-beacon-ai-mysql-data:
