@@ -13,7 +13,7 @@ import static jakarta.persistence.GenerationType.AUTO;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "tb_user")
 public class CandidateEntity {
     @Id
     @GeneratedValue(strategy = AUTO)

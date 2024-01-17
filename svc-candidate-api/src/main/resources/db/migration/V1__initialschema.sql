@@ -1,4 +1,4 @@
-CREATE TABLE user
+CREATE TABLE tb_user
 (
     id         BIGINT       NOT NULL,
     email      VARCHAR(255) NOT NULL,
@@ -7,5 +7,6 @@ CREATE TABLE user
     country    VARCHAR(255) NOT NULL,
     city       VARCHAR(255) NOT NULL,
     zip        VARCHAR(11)  NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (id),
+    CONSTRAINT UC_Email UNIQUE (email)
 );
