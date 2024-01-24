@@ -157,6 +157,48 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <verbose>true</verbose>
+                    <images>
+                        <image>
+                            <name>andrewkandzuba/${project.artifactId}</name>
+                            <build>
+                                <dockerFileDir>${pom.basedir}</dockerFileDir>
+                                <tags>
+                                    <tag>${project.version}</tag>
+                                    <tag>latest</tag>
+                                    <tag>%t</tag>
+                                </tags>
+                            </build>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>start</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>start</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>stop</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>stop</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

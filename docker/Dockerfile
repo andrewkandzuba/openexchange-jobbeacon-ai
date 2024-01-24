@@ -6,7 +6,7 @@ ENV APPLICATION_PORT=8080 \
     APPLICATION_NAME=svc-candidate-api
 
 VOLUME /tmp
-COPY ${APPLICATION_NAME}/target/*.jar /openexchange/${APPLICATION_NAME}.jar
+COPY target/*.jar /openexchange/${APPLICATION_NAME}.jar
 COPY scripts/entrypoint.sh /openexchange/entrypoint.sh
 
 RUN chmod +x /openexchange/entrypoint.sh
